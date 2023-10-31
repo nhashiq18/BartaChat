@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import chats from "../../../backend/data/data";
+
 
 const ChatPage = ()=>{
     const [chats, setChats] = useState([]);
@@ -17,9 +17,7 @@ const ChatPage = ()=>{
 
     return(
         <div>
-            {chats.map((chat)=>(
-                <div key={chat._id}>{chat.chatName}</div>
-            ))}
+            hello
         </div>
     );
 }
