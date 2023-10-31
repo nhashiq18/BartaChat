@@ -2,10 +2,10 @@
   "name": "rt-chat-app",
   "version": "1.0.0",
   "description": "",
-  "main": "app.js",
+  "main": "server.js",
   "scripts": {
-    "start": "set NODE_ENV=development & nodemon app.js",
-    "prod": "set NODE_ENV=production & node app.js"
+    "start": "nodemon backend/server.js"
+  
   },
   "author": "nahid",
   "license": "ISC",
