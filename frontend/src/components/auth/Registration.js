@@ -18,13 +18,55 @@ const RegistrationComponent = () => {
   const [photo, setPhoto] = useState("");
   const [phone, setPhone] = useState("");
   const [picLoading, setPicLoading] = useState(false);
+  const toast = useToast();
+
 
   const submitHandler = () => {
     // Your registration logic here
   };
 
-  const postDetails = (file) => {
-    // Your function logic here
+  const postDetails = (pics) => {
+    setPicLoading(true);
+    if (pics===undefined) {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      return;
+    }
+    if (pics.type === "image/jpeg" || pics.type === "image/png") {
+      const data = new FormData();
+      data.append("file", pics);
+      data.append("upload_preset", "chat-app");
+      data.append("cloud_name", "ddmzwj6bt");
+      fetch("https://api.cloudinary.com/v1_1/ddmzwj6bt/image/upload", {
+        method: "post",
+        body: data,
+      })
+        .then((res) => res.json())
+        .then((data) => {
+          setPhoto(data.url.toString());
+          console.log(data.url.toString());
+          setPicLoading(false);
+        })
+        .catch((err) => {
+          console.log(err);
+          setPicLoading(false);
+        });
+    } else {
+      toast({
+        title: "Please Select an Image!",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setPicLoading(false);
+      return;
+    }
   };
 
   return (
