@@ -8,13 +8,14 @@ const userModel = mongoose.Schema(
       },
       email: {
         type: String,
-        required: true,
-      },
-      password: {
-        type: String,
+        unique: true,
         required: true,
       },
       phone: {
+        type: String,
+        required: true,
+      },
+      password: {
         type: String,
         required: true,
       },
@@ -28,6 +29,6 @@ const userModel = mongoose.Schema(
   }
 );
 
-const User = mongoose.model("Chat", userModel);
+const User = mongoose.model("user", userModel);
 
 module.exports = User;
