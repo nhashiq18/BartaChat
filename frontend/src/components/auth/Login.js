@@ -15,15 +15,61 @@ const LoginComponent = () => {
   const togglePasswordVisibility = () => setShowPassword(!showPassword);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [picLoading, setPicLoading] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const toast = useToast();
+  const history = useHistory();
 
-  const submitHandler = () => {
-    // Your login logic here
+  const submitHandler = async () => {
+    setLoading(true);
+    if (!email || !password) {
+      toast({
+        title: "Please Fill all the Feilds",
+        status: "warning",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const config = {
+        headers: {
+          "Content-type": "application/json",
+        },
+      };
+
+      const { data } = await axios.post(
+        "/api/user/login",
+        { email, password },
+        config
+      );
+
+      toast({
+        title: "Login Successful",
+        status: "success",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+  
+      localStorage.setItem("userInfo", JSON.stringify(data));
+      setLoading(false);
+      history.push("/chats");
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: error.response.data.message,
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+      setLoading(false);
+    }
   };
 
-  const postDetails = () => {
-    // Your function logic here
-  };
 
   return (
     <VStack spacing="5px" style={{ background: "#0b3954", padding: "20px", borderRadius: "10px", boxShadow: "0px 0px 10px 0px #0b3954", width: "450px"}}>
@@ -61,7 +107,7 @@ const LoginComponent = () => {
         width="100%"
         style={{ marginTop: 15, background: "#61d095", color: "#fff" }}
         onClick={submitHandler}
-        isLoading={picLoading}
+        isLoading={loading}
       >
         Login
       </Button>

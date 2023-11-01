@@ -12,8 +12,7 @@ connectDB();
 const app = express();
 
 app.use(express.json());
-app.use(notFound);
-app.use(errorHandler);
+
 
 app.get('/', (req, res)=>{
     res.send("API is running");
