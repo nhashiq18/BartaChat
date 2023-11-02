@@ -2,6 +2,7 @@ const asyncHandler = require("express-async-handler");
 const Chat = require("../../models/chatModel");
 const User = require("../../models/userModel"); // Import the User model correctly
 
+//remove user from group
 const removeFromGroup = asyncHandler(async (req, res) => {
   const { chatId, chatName } = req.body;
   const removed = await Chat.findByIdAndUpdate(
@@ -23,5 +24,4 @@ const removeFromGroup = asyncHandler(async (req, res) => {
     res.json(removed);
   }
 });
-
 module.exports = removeFromGroup;
