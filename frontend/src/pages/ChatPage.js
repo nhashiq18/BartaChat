@@ -1,6 +1,6 @@
 import ChatBox from "../components/Chatpage/ChatBox";
 import MyChatList from "../components/Chatpage/MyChatList";
-import SideBar from "../components/Chatpage/SideBar";
+import SideBar from "../components/Chatpage/SideAndNavBar";
 import { ChatState } from "../context/ChatContext";
 import React from "react";
 
@@ -11,7 +11,6 @@ const ChatPage = ()=>{
     return(
         <div style={{width: "100%"}}>
             {user && <SideBar />}
-            {user && <ChatBox />}
             {user && <MyChatList />}
         </div>
     );
