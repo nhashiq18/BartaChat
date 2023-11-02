@@ -4,7 +4,7 @@ const User = require("../../models/userModel"); // Import the User model correct
 
 //remove user from group
 const addToGroup = asyncHandler(async (req, res) => {
-  const { chatId, chatName } = req.body;
+  const { chatId, userId } = req.body;
   const removed = await Chat.findByIdAndUpdate(
     chatId,
     {
