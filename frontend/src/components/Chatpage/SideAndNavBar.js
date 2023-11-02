@@ -27,7 +27,7 @@ import {
   DrawerHeader,
   DrawerOverlay,
 } from "@chakra-ui/modal";
-import { EmailIcon, ChevronDownIcon, SearchIcon } from "@chakra-ui/icons"; // Import the SearchIcon
+import { EmailIcon, ChevronDownIcon, SearchIcon, AtSignIcon, CheckCircleIcon, ViewIcon} from "@chakra-ui/icons"; // Import the SearchIcon
 import { useHistory } from "react-router-dom";
 import Profile from "../profile/Profile";
 import { ChatState } from "../../context/ChatContext";
@@ -54,6 +54,13 @@ const SideAndNavBar = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const history = useHistory();
   const toast = useToast();
+  const [isHovered, setIsHovered] = useState(false);
+
+  const handleSearchIconClick = () => {
+    if (search.trim() !== "") {
+      handleSearch();
+    }
+  };
 
   const logoutHandler = () => {
     localStorage.removeItem("userInfo");
@@ -131,7 +138,7 @@ const SideAndNavBar = () => {
         display="flex"
         justifyContent="space-between"
         alignItems="center"
-        bg="#3E54E7" // Background color
+        bg="#6B46C1" // Background color
         color="white"
         py={2}
         px={4}
@@ -139,19 +146,24 @@ const SideAndNavBar = () => {
       >
         <div>
           <Menu>
-            <MenuButton as={Button} bg="#3E54E7" color="white">
+            <MenuButton as={Button} bg="" color="white">
               <Avatar size="sm" name={user.name} src={user.profilePhoto}>
-                <AvatarBadge bg="#67CB48" boxSize={2} borderWidth={0} />
+                <AvatarBadge bg="green" boxSize={2} borderWidth={0} />
               </Avatar>
             </MenuButton>
             <MenuList color="black">
-              {" "}
-              {/* Text color set to black */}
               <Profile user={user}>
-                <MenuItem>My Profile</MenuItem>
+                <MenuItem>
+                  <ViewIcon mr={2} />{" "}
+                  {/* Replace UserIcon with a suitable icon */}
+                  My Profile
+                </MenuItem>
               </Profile>
               <MenuDivider />
-              <MenuItem onClick={logoutHandler}>Logout</MenuItem>
+              <MenuItem onClick={logoutHandler} color="red">
+                <CheckCircleIcon mr={2} /> {/* Use LogOutIcon from Chakra UI */}
+                Logout
+              </MenuItem>
             </MenuList>
           </Menu>
           <Menu>
@@ -202,34 +214,64 @@ const SideAndNavBar = () => {
         </div>
       </Box>
       <Drawer placement="right" onClose={onClose} isOpen={isOpen}>
-        <DrawerOverlay />
-        <DrawerContent>
-          <DrawerHeader borderBottomWidth="1px">Search Users</DrawerHeader>
-          <DrawerBody>
-            <Box d="flex" pb={2}>
-              <Input
-                placeholder="Search by name or email"
-                mr={2}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-              />
-              <Button onClick={handleSearch}>Go</Button>
-            </Box>
-            {loading ? (
-              <ChatLoading />
-            ) : (
-              searchResult?.map((user) => (
-                <UserListItem
-                  key={user._id}
-                  user={user}
-                  handleFunction={() => accessChat(user._id)}
+      <DrawerOverlay />
+      <DrawerContent>
+      <DrawerHeader borderBottomWidth="1px" py={4}>
+          <Box display="flex" alignItems="center">
+            <AtSignIcon
+              color="blue.500" // Icon color
+              boxSize={6}
+              _hover={{ transform: "rotate(20deg)" }} // Add a rotation animation on hover
+            />
+            <Text ml={2} color="blue.500" fontFamily="Work Sans, sans-serif" fontSize="2xl">
+              Search Users
+            </Text>
+          </Box>
+        </DrawerHeader>
+        <DrawerBody>
+          <InputGroup size="md" mb={4}>
+            <Input
+              placeholder="Search by name or email"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              pr={isHovered ? "2.5rem" : "0.75rem"}
+              _hover={{ pr: "2.5rem" }}
+            />
+            <InputRightElement>
+              <Button
+                colorScheme="purple"
+                onClick={handleSearch}
+                opacity={isHovered ? 1 : 0}
+                _groupHover={{ opacity: 1 }}
+              >
+                <SearchIcon
+                  color="white"
+                  _hover={{ transform: "scale(1.1)" }}
                 />
-              ))
-            )}
-            {loadingChat && <Spinner ml="auto" d="flex" />}
-          </DrawerBody>
-        </DrawerContent>
-      </Drawer>
+              </Button>
+            </InputRightElement>
+          </InputGroup>
+          {loading ? (
+            <ChatLoading />
+          ) : (
+            searchResult?.map((user) => (
+              <UserListItem
+                key={user._id}
+                user={user}
+                handleFunction={() => accessChat(user._id)}
+              />
+            ))
+          )}
+          {loadingChat && (
+            <Spinner
+              ml="auto"
+              mt={4}
+              color="blue.500"
+            />
+          )}
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
     </>
   );
 };

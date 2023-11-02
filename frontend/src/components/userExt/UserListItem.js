@@ -1,5 +1,5 @@
 import { Avatar } from "@chakra-ui/avatar";
-import { Box, Text } from "@chakra-ui/layout";
+import { Box, Text, Flex } from "@chakra-ui/layout";
 import { ChatState } from "../../context/ChatContext";
 
 
@@ -7,12 +7,12 @@ const UserListItem = ({ handleFunction }) => {
   const { user } = ChatState();
 
   return (
-    <Box
+    <Flex
       onClick={handleFunction}
       cursor="pointer"
       bg="#E8E8E8"
       _hover={{
-        background: "#38B2AC",
+        background: "#6B46C1",
         color: "white",
       }}
       w="100%"
@@ -34,7 +34,7 @@ const UserListItem = ({ handleFunction }) => {
       <Box>
         <Text>{user.name}</Text>
       </Box>
-    </Box>
+    </Flex>
   );
 };
 
