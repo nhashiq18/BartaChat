@@ -142,14 +142,14 @@ import {
             <ModalBody d="flex" flexDir="column" alignItems="center">
               <FormControl>
                 <Input
-                  placeholder="Chat Name"
+                  placeholder="group name"
                   mb={3}
                   onChange={(e) => setGroupChatName(e.target.value)}
                 />
               </FormControl>
               <FormControl>
                 <Input
-                  placeholder="Add Users e.g., John, Piyush, Jane"
+                  placeholder="search user"
                   mb={1}
                   onChange={(e) => handleSearch(e.target.value)}
                 />
