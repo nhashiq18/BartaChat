@@ -2,7 +2,7 @@ import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
 import { Box, Text, Flex, ChatIcon } from "@chakra-ui/layout";
 import { AiOutlineMessage } from "react-icons/ai";
-import { IconButton, Spinner, useToast } from "@chakra-ui/react";
+import { IconButton, Spinner, position, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -10,11 +10,10 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "../profile/Profile";
 import UpdateGroupChatModal from "../Chatpage/UpdateGroupChatModal";
 import { ChatState } from "../../context/ChatContext";
+import ScrollableChat from "./ScrollableChat";
+import "./styles.css"
 
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-  const { selectedChat, setSelectedChat, user, notification, setNotification } =
-    ChatState();
-
   const [messages, setMessages] = useState([]);
   const [loading, setLoading] = useState(false);
   const [newMessage, setNewMessage] = useState("");
@@ -22,6 +21,79 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const [typing, setTyping] = useState(false);
   const [istyping, setIsTyping] = useState(false);
   const toast = useToast();
+
+  const { selectedChat, setSelectedChat, user, notification, setNotification } =
+    ChatState();
+
+  const fetchMessages = async () => {
+    if (!selectedChat) return;
+
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user.token}`,
+        },
+      };
+
+      setLoading(true);
+
+      const { data } = await axios.get(
+        `/api/message/${selectedChat._id}`,
+        config
+      );
+      setMessages(data);
+      setLoading(false);
+    } catch (error) {
+      toast({
+        title: "Error Occured!",
+        description: "Failed to Load the Messages",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+        position: "bottom",
+      });
+    }
+  };
+  useEffect(() => {
+    fetchMessages();
+  }, [selectedChat]);
+
+  const sendMessage = async (event) => {
+    if (event.key === "Enter" && newMessage) {
+      try {
+        const config = {
+          headers: {
+            "Content-type": "application/json",
+            Authorization: `Bearer ${user.token}`,
+          },
+        };
+        setNewMessage("");
+        const { data } = await axios.post(
+          "/api/message",
+          {
+            content: newMessage,
+            chatId: selectedChat._id,
+          },
+          config
+        );
+        setMessages([...messages, data]);
+      } catch (error) {
+        toast({
+          title: "Error Occured!",
+          description: "Failed to send the Message",
+          status: "error",
+          duration: 5000,
+          isClosable: true,
+          position: "bottom",
+        });
+      }
+    }
+  };
+  const typeHandler = (e) => {
+    setNewMessage(e.target.value);
+
+    //logic next
+  };
 
   return (
     <>
@@ -60,25 +132,56 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
-            
             bg="#E9D8FD"
             w="100%"
             h="90%"
             borderRadius="lg"
             overflowY="hidden"
           >
-            {/*message*/}
+            {loading ? (
+              <Spinner
+                size="xl"
+                w={20}
+                h={20}
+                alignSelf="center"
+                margin="auto"
+              />
+            ) : (
+              <div
+                className="messages"
+              >
+                <ScrollableChat messages={messages} />
+              </div>
+            )}
+
+            <FormControl onKeyDown={sendMessage} isRequired>
+              <Input
+                variant="filled"
+                bg="#F7FAFC"
+                placeholder="Enter a message"
+                onChange={typeHandler}
+                value={newMessage}
+                width={1030}
+                style={{ position: "fixed", bottom: 0, left: 475, right: 0 }}
+              />
+            </FormControl>
           </Box>
         </>
       ) : (
         <Flex alignItems="center" justifyContent="center" h="100%">
-        <Box textAlign="center">
-          <AiOutlineMessage size={100} color="teal" /> {/* Adjust the size and color */}
-          <Text fontSize="3xl" fontFamily="Work sans" textAlign="center" fontStyle={"italic"}>
-            Select any user or group to start a conversation
-          </Text>
-        </Box>
-      </Flex>
+          <Box textAlign="center">
+            <AiOutlineMessage size={100} color="teal" />{" "}
+            {/* Adjust the size and color */}
+            <Text
+              fontSize="3xl"
+              fontFamily="Work sans"
+              textAlign="center"
+              fontStyle={"italic"}
+            >
+              Select any user or group to start a conversation
+            </Text>
+          </Box>
+        </Flex>
       )}
     </>
   );

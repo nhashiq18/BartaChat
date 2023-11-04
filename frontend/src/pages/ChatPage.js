@@ -4,6 +4,7 @@ import { ChatState } from "../context/ChatContext";
 import React, { useState } from "react";
 import { Box } from "@chakra-ui/layout";
 import Chatbox from "../components/Chatpage/ChatBox";
+import ScrollableChat from "../components/Chatpage/ScrollableChat";
 
 const ChatPage = () => {
   const [fetchAgain, setFetchAgain] = useState(false);
