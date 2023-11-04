@@ -1,4 +1,4 @@
-import { ViewIcon } from "@chakra-ui/icons";
+import { SettingsIcon } from "@chakra-ui/icons";
 import {
   Modal,
   ModalOverlay,
@@ -206,7 +206,19 @@ const UpdateGroupChatModal = ({ fetchMessages, fetchAgain, setFetchAgain }) => {
 
   return (
     <>
-    <IconButton d={{ base: "flex" }} icon={<ViewIcon />} onClick={onOpen} />
+    <IconButton
+          d={{ base: "flex" }}
+          // Use the suitable icon for viewing a profile
+          icon={<SettingsIcon  />}
+          onClick={onOpen}
+          bg="green.500"
+          color="white"
+          borderRadius="full"
+          size="sm"
+          _hover={{
+            bg: "purple.600",
+          }}
+        />
 
     <Modal onClose={onClose} isOpen={isOpen} isCentered>
       <ModalOverlay />

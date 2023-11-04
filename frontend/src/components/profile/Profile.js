@@ -1,4 +1,4 @@
-import { PhoneIcon, EmailIcon, ViewIcon } from "@chakra-ui/icons";
+import { PhoneIcon, EmailIcon, AtSignIcon  } from "@chakra-ui/icons"; // Replace "YourCustomProfileIcon" with the actual icon you want to use
 import {
   Modal,
   ModalOverlay,
@@ -28,9 +28,10 @@ const Profile = ({ user, children }) => {
       ) : (
         <IconButton
           d={{ base: "flex" }}
-          icon={<ViewIcon />}
+          // Use the suitable icon for viewing a profile
+          icon={<AtSignIcon  />}
           onClick={onOpen}
-          bg="purple.500"
+          bg="green.500"
           color="white"
           borderRadius="full"
           size="sm"

@@ -1,7 +1,7 @@
 import { FormControl } from "@chakra-ui/form-control";
 import { Input } from "@chakra-ui/input";
-import { Box, Text } from "@chakra-ui/layout";
-
+import { Box, Text, Flex, ChatIcon } from "@chakra-ui/layout";
+import { AiOutlineMessage } from "react-icons/ai";
 import { IconButton, Spinner, useToast } from "@chakra-ui/react";
 import { getSender, getSenderFull } from "../config/ChatLogics";
 import { useEffect, useState } from "react";
@@ -11,9 +11,8 @@ import ProfileModal from "../profile/Profile";
 import UpdateGroupChatModal from "../Chatpage/UpdateGroupChatModal";
 import { ChatState } from "../../context/ChatContext";
 
-
 const SingleChat = ({ fetchAgain, setFetchAgain }) => {
-    const { selectedChat, setSelectedChat, user, notification, setNotification } =
+  const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
   const [messages, setMessages] = useState([]);
@@ -38,7 +37,6 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent={{ base: "space-between" }}
             alignItems="center"
           >
-            
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
@@ -49,12 +47,11 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
                 </>
               ) : (
                 <>
-                  {selectedChat.chatName.toUpperCase()}
+                  {selectedChat.chatName}
                   <UpdateGroupChatModal
                     fetchAgain={fetchAgain}
                     setFetchAgain={setFetchAgain}
                   />
-                  
                 </>
               ))}
           </Text>
@@ -63,6 +60,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             flexDir="column"
             justifyContent="flex-end"
             p={3}
+            
             bg="#E9D8FD"
             w="100%"
             h="90%"
@@ -71,15 +69,16 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           >
             {/*message*/}
           </Box>
-          
         </>
       ) : (
-        // to get socket.io on same page
-        <Box d="flex" alignItems="center" justifyContent="center" h="100%">
-          <Text fontSize="3xl" pb={3} fontFamily="Work sans">
-            Click on a user to start chatting
+        <Flex alignItems="center" justifyContent="center" h="100%">
+        <Box textAlign="center">
+          <AiOutlineMessage size={100} color="teal" /> {/* Adjust the size and color */}
+          <Text fontSize="3xl" fontFamily="Work sans" textAlign="center" fontStyle={"italic"}>
+            Select any user or group to start a conversation
           </Text>
         </Box>
+      </Flex>
       )}
     </>
   );

@@ -53,7 +53,6 @@ const MyChatList = ({ fetchAgain }) => {
       p={3}
       bg="white"
       w={{ base: "100%", md: "31%" }}
-      borderRadius="lg"
       borderWidth="1px"
     >
       <Flex
@@ -66,39 +65,35 @@ const MyChatList = ({ fetchAgain }) => {
         alignItems="center"
       >
         <Text>Recent Messages</Text>
-        {/* Wrap the button in a Tooltip */}
         <Tooltip
           label="Create Group Chat"
           hasArrow
-          fontSize="sm" // Make the tooltip text smaller
-          placement="top" // Place it above the button
+          fontSize="sm"
+          placement="top"
         >
           <CreateGroupChatModal>
-          <Button
-            variant="ghost"
-            color="blue.400"
-            // Add hover animation
-            _hover={{
-              backgroundColor: "blue.100",
-            }}
-          >
-            <AddIcon />
-          </Button>
+            <Button
+              variant="ghost"
+              color="blue.400"
+              _hover={{
+                backgroundColor: "blue.100",
+              }}
+            >
+              <AddIcon />
+            </Button>
           </CreateGroupChatModal>
         </Tooltip>
       </Flex>
       <Box
         d="flex"
         flexDir="column"
-        p={3}
+     
         bg="#FAF5FF"
-        w="100%"
-        h="90%"
         borderRadius="lg"
-        overflowY="hidden"
+        
       >
         {chats ? (
-          <Stack overflowY="scroll">
+          <Stack overflowY="auto"> {/* Make the Stack scrollable */}
             {chats.map((chat) => (
               <Box
                 onClick={() => setSelectedChat(chat)}

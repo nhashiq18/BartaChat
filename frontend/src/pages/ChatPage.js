@@ -14,22 +14,21 @@ const ChatPage = () => {
       {user && <SideBar />}
       <Box
         display="flex"
-        justifyContent="space-between"
         width="100%"
-        height="91.5vh"
-        padding="10px"
+        height="100vh"
+       
       >
         {user && (
           <MyChatList
             fetchAgain={fetchAgain}
-            style={{ flex: "1" }} // Set flex ratio to 1 for MyChatList
+            style={{ flex: "1", border: "none" }} // Remove the border
           />
         )}
         {user && (
           <Chatbox
             fetchAgain={fetchAgain}
             setFetchAgain={setFetchAgain}
-            style={{ flex: "1" }} // Set flex ratio to 1 for Chatbox
+            style={{ flex: "1", border: "none" }} // Remove the border
           />
         )}
       </Box>
