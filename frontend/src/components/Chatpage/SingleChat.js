@@ -38,11 +38,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
             justifyContent={{ base: "space-between" }}
             alignItems="center"
           >
-            <IconButton
-              d={{ base: "flex", md: "none" }}
-              icon={<ArrowBackIcon />}
-              onClick={() => setSelectedChat("")}
-            />
+            
             {messages &&
               (!selectedChat.isGroupChat ? (
                 <>
@@ -54,10 +50,27 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               ) : (
                 <>
                   {selectedChat.chatName.toUpperCase()}
+                  <UpdateGroupChatModal
+                    fetchAgain={fetchAgain}
+                    setFetchAgain={setFetchAgain}
+                  />
                   
                 </>
               ))}
           </Text>
+          <Box
+            d="flex"
+            flexDir="column"
+            justifyContent="flex-end"
+            p={3}
+            bg="#E9D8FD"
+            w="100%"
+            h="90%"
+            borderRadius="lg"
+            overflowY="hidden"
+          >
+            {/*message*/}
+          </Box>
           
         </>
       ) : (

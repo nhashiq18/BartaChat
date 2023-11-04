@@ -33,7 +33,7 @@ const Profile = ({ user, children }) => {
           bg="purple.500"
           color="white"
           borderRadius="full"
-          size="lg"
+          size="sm"
           _hover={{
             bg: "purple.600",
           }}

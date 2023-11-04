@@ -91,9 +91,9 @@ const MyChatList = ({ fetchAgain }) => {
         d="flex"
         flexDir="column"
         p={3}
-        bg="#F8F8F8"
+        bg="#FAF5FF"
         w="100%"
-        h="100%"
+        h="90%"
         borderRadius="lg"
         overflowY="hidden"
       >
