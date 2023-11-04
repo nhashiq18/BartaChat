@@ -7,7 +7,7 @@ const allMessage = require("../controllers/messageController/allMessage");
 const router = express.Router();
 
 router.route("/").post(protect, sendMessage);
-//router.route("/:chatId").get(protect, allMessage);
+router.route("/:chatId").get(protect, allMessage);
 
 
 
