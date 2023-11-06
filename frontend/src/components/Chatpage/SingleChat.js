@@ -31,6 +31,9 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const { selectedChat, setSelectedChat, user, notification, setNotification } =
     ChatState();
 
+
+   
+
   const fetchMessages = async () => {
     if (!selectedChat) return;
 
@@ -62,17 +65,33 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     }
   };
   useEffect(() => {
-    fetchMessages();
-  }, [selectedChat]);
-
-  useEffect(() => {
     socket = io(ENDPOINT);
     socket.on("connected", () => setSocketConnected(true));
-    socket.on("typing", () => setIsTyping(true));
-    socket.on("stop typing", () => setIsTyping(false));
+    socket.emit("setup", user);
+    socket.on("connected", () => setSocketConnected(true));
+
 
     // eslint-disable-next-line
   }, []);
+  useEffect(() => {
+    fetchMessages();
+    selectedChatCompare = selectedChat;
+  }, [selectedChat]);
+
+  useEffect(() => {
+    socket.on("message recieved", (newMessageRecieved) => {
+      if (
+        !selectedChatCompare || // if chat is not selected or doesn't match current chat
+        selectedChatCompare._id !== newMessageRecieved.chat._id
+      ) {
+        //code
+      } else {
+        setMessages([...messages, newMessageRecieved]);
+      }
+    });
+  });
+
+  
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
@@ -92,6 +111,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
           },
           config
         );
+        socket.emit("new message", data);
         setMessages([...messages, data]);
       } catch (error) {
         toast({
