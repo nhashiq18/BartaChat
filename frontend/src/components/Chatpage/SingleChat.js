@@ -10,7 +10,7 @@ import { ArrowBackIcon } from "@chakra-ui/icons";
 import ProfileModal from "../profile/Profile";
 import UpdateGroupChatModal from "../Chatpage/UpdateGroupChatModal";
 import { ChatState } from "../../context/ChatContext";
-import ScrollableChat from "./ScrollableChat";
+import ScrollableChat from "./ScrollableChat"
 import Lottie from "react-lottie";
 import "./styles.css"
 import io from "socket.io-client";
@@ -96,7 +96,10 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
         !selectedChatCompare || // if chat is not selected or doesn't match current chat
         selectedChatCompare._id !== newMessageRecieved.chat._id
       ) {
-        //code
+        if (!notification.includes(newMessageRecieved)) {
+          setNotification([newMessageRecieved, ...notification]);
+          setFetchAgain(!fetchAgain);
+        }
       } else {
         setMessages([...messages, newMessageRecieved]);
       }

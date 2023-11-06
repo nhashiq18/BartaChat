@@ -35,6 +35,10 @@ import { useDisclosure } from "@chakra-ui/hooks";
 import { Spinner } from "@chakra-ui/spinner";
 import ChatLoading from "./ChatLoading";
 import UserListItem from "../userExt/UserListItem"
+import { Effect } from "react-notification-badge";
+import NotificationBadge from "react-notification-badge";
+import { getSender } from "../config/ChatLogics";
+import { BellIcon } from "@chakra-ui/icons";
 
 const SideAndNavBar = () => {
   const [search, setSearch] = useState("");
@@ -55,6 +59,12 @@ const SideAndNavBar = () => {
   const history = useHistory();
   const toast = useToast();
   const [isHovered, setIsHovered] = useState(false);
+  const badgeStyle = {
+    backgroundColor: "#ff5722", // Change the badge background color
+    color: "white", // Change the badge text color
+    fontSize: "12px", // Adjust the font size
+    padding: "4px 8px", // Adjust padding for the badge
+  };
 
   const handleSearchIconClick = () => {
     if (search.trim() !== "") {
@@ -167,10 +177,31 @@ const SideAndNavBar = () => {
             </MenuList>
           </Menu>
           <Menu>
-            <MenuButton p={1}>
-              <EmailIcon fontSize="2xl" />
-            </MenuButton>
-          </Menu>
+  <MenuButton p={1}>
+    <NotificationBadge
+      count={notification.length}
+      effect={Effect.SCALE}
+      style={badgeStyle} // Apply custom styles to the badge
+    />
+    <BellIcon fontSize="2xl" m={1} />
+  </MenuButton>
+  <MenuList pl={2} bg="lightgray" color="black">
+    {!notification.length && "No New Messages"}
+    {notification.map((notif) => (
+      <MenuItem
+        key={notif._id}
+        onClick={() => {
+          setSelectedChat(notif.chat);
+          setNotification(notification.filter((n) => n !== notif));
+        }}
+      >
+        {notif.chat.isGroupChat
+          ? `New Message in ${notif.chat.chatName}`
+          : `New Message from ${getSender(user, notif.chat.users)}`}
+      </MenuItem>
+    ))}
+  </MenuList>
+</Menu>
         </div>
 
         <Text

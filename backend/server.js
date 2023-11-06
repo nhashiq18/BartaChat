@@ -65,5 +65,10 @@ io.on("connection", (socket) => {
     });
   });
 
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
+  });
+
 
 });
