@@ -178,7 +178,7 @@ const SideAndNavBar = () => {
           fontWeight="bold"
           fontFamily="Work Sans, sans-serif"
         >
-          Buddyin
+          BartaChat
         </Text>
 
         <div>

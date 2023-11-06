@@ -11,8 +11,10 @@ import ProfileModal from "../profile/Profile";
 import UpdateGroupChatModal from "../Chatpage/UpdateGroupChatModal";
 import { ChatState } from "../../context/ChatContext";
 import ScrollableChat from "./ScrollableChat";
+import Lottie from "react-lottie";
 import "./styles.css"
 import io from "socket.io-client";
+import animationData from "../../animations/typing.json";
 
 
 const ENDPOINT = "http://localhost:5000"; 
@@ -32,6 +34,14 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     ChatState();
 
 
+    const defaultOptions = {
+      loop: true,
+      autoplay: true,
+      animationData: animationData,
+      rendererSettings: {
+        preserveAspectRatio: "xMidYMid slice",
+      },
+    };
    
 
   const fetchMessages = async () => {
@@ -69,6 +79,8 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
     socket.on("connected", () => setSocketConnected(true));
     socket.emit("setup", user);
     socket.on("connected", () => setSocketConnected(true));
+    socket.on("typing", () => setIsTyping(true));
+    socket.on("stop typing", () => setIsTyping(false));
 
 
     // eslint-disable-next-line
@@ -95,6 +107,7 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
 
   const sendMessage = async (event) => {
     if (event.key === "Enter" && newMessage) {
+      socket.emit("stop typing", selectedChat._id);
       try {
         const config = {
           headers: {
@@ -128,7 +141,22 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
   const typeHandler = (e) => {
     setNewMessage(e.target.value);
 
-    //logic next
+    if (!socketConnected) return;
+
+    if (!typing) {
+      setTyping(true);
+      socket.emit("typing", selectedChat._id);
+    }
+    let lastTypingTime = new Date().getTime();
+    var timerLength = 3000;
+    setTimeout(() => {
+      var timeNow = new Date().getTime();
+      var timeDiff = timeNow - lastTypingTime;
+      if (timeDiff >= timerLength && typing) {
+        socket.emit("stop typing", selectedChat._id);
+        setTyping(false);
+      }
+    }, timerLength);
   };
 
   return (
@@ -190,7 +218,19 @@ const SingleChat = ({ fetchAgain, setFetchAgain }) => {
               </div>
             )}
 
-            <FormControl onKeyDown={sendMessage} isRequired>
+            <FormControl onKeyDown={sendMessage} isRequired  id="first-name">
+            {istyping ? (
+                <div>
+                  <Lottie
+                    options={defaultOptions}
+                    // height={50}
+                    width={70}
+                    style={{ marginBottom: 15, marginLeft: 0 }}
+                  />
+                </div>
+              ) : (
+                <></>
+              )}
               <Input
                 variant="filled"
                 bg="#F7FAFC"
